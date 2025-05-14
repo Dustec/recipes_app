@@ -6,8 +6,7 @@ Una aplicación de recetas que permite buscar y guardar tus recetas favoritas. D
 
 - Búsqueda de recetas por nombre
 - Carga infinita de recetas organizadas alfabéticamente
-- Sistema de favoritos para guardar tus recetas preferidas
-- Interfaz de usuario moderna y responsiva
+- Sistema de favoritos para guardar tus recetas preferidas (Sin persistencia)
 - Diseño siguiendo Clean Architecture
 
 ## Requisitos Previos
@@ -76,15 +75,3 @@ lib/
 - Freezed para inmutabilidad
 - Clean Architecture
 - TheMealDB API
-
-## Contribuir
-
-1. Fork el proyecto
-2. Crea tu rama de características (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abre un Pull Request
-
-## Licencia
-
-Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE.md](LICENSE.md) para más detalles.
