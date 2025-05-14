@@ -39,7 +39,7 @@ class MealFromDtoMapper implements Mapper<MealDto, Meal> {
             dto.strIngredient18,
             dto.strIngredient19,
             dto.strIngredient20,
-          ].whereType<String>().toList(),
+          ].whereType<String>().where((e) => e.isNotEmpty).toList(),
       measures:
           [
             dto.strMeasure1,
@@ -62,7 +62,7 @@ class MealFromDtoMapper implements Mapper<MealDto, Meal> {
             dto.strMeasure18,
             dto.strMeasure19,
             dto.strMeasure20,
-          ].whereType<String>().toList(),
+          ].whereType<String>().where((e) => e.isNotEmpty).toList(),
       source: dto.strSource,
       imageSourceUrl: dto.strImageSource,
       creativeCommonsConfirmed: dto.strCreativeCommonsConfirmed,

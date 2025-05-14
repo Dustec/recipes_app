@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:recipes_app/core/presentation/ui/app_colors.dart';
 import 'package:recipes_app/features/recipes/domain/models/meal.dart';
+import 'package:recipes_app/features/recipes/presentation/pages/recipe_details_page.dart';
 
 class RecipeTile extends StatelessWidget {
   const RecipeTile({super.key, required this.meal});
@@ -17,7 +18,12 @@ class RecipeTile extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: InkWell(
         onTap: () {
-          // TODO: Navigate to recipe details
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => RecipeDetailsPage(meal: meal),
+            ),
+          );
         },
         borderRadius: BorderRadius.circular(16),
         child: Column(
@@ -27,24 +33,27 @@ class RecipeTile extends StatelessWidget {
               borderRadius: const BorderRadius.vertical(
                 top: Radius.circular(16),
               ),
-              child: CachedNetworkImage(
-                imageUrl: meal.thumbnailUrl ?? '',
-                height: 140,
-                width: double.infinity,
-                fit: BoxFit.fitWidth,
-                alignment: Alignment.center,
-                placeholder:
-                    (context, url) => Container(
-                      height: 200,
-                      color: AppColors.primaryOrange.withValues(alpha: 0.1),
-                      child: const Center(child: CircularProgressIndicator()),
-                    ),
-                errorWidget:
-                    (context, url, error) => Container(
-                      height: 200,
-                      color: AppColors.primaryOrange.withValues(alpha: 0.1),
-                      child: const Icon(Icons.error),
-                    ),
+              child: Hero(
+                tag: 'recipe-image-${meal.id}',
+                child: CachedNetworkImage(
+                  imageUrl: meal.thumbnailUrl ?? '',
+                  height: 140,
+                  width: double.infinity,
+                  fit: BoxFit.fitWidth,
+                  alignment: Alignment.center,
+                  placeholder:
+                      (context, url) => Container(
+                        height: 200,
+                        color: AppColors.primaryOrange.withOpacity(0.1),
+                        child: const Center(child: CircularProgressIndicator()),
+                      ),
+                  errorWidget:
+                      (context, url, error) => Container(
+                        height: 200,
+                        color: AppColors.primaryOrange.withOpacity(0.1),
+                        child: const Icon(Icons.error),
+                      ),
+                ),
               ),
             ),
             Padding(
