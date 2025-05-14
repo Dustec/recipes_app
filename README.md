@@ -75,3 +75,8 @@ lib/
 - Freezed para inmutabilidad
 - Clean Architecture
 - TheMealDB API
+
+## Demo
+
+![Demo de la app](demo.gif)
+
