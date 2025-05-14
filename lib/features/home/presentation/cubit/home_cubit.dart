@@ -104,9 +104,15 @@ class HomeCubit extends Cubit<HomeState> with DisposableMixin {
   void toggleFavorite(String mealId) {
     _recipesRepository
         .toggleFavorite(mealId)
-        .listen((meals) {
-          emit(state.copyWith(meals: meals));
-        }, onError: (error) {})
+        .listen(
+          (meals) {
+            emit(state.copyWith(meals: meals));
+          },
+          onError: (error) {
+            //
+            print(error);
+          },
+        )
         .dispose(this);
   }
 }

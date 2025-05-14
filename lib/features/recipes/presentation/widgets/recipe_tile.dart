@@ -14,6 +14,7 @@ class RecipeTile extends StatelessWidget {
 
   final Meal meal;
   final VoidCallback onToggleFavorite;
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -33,32 +34,70 @@ class RecipeTile extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ClipRRect(
-              borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(16),
-              ),
-              child: Hero(
-                tag: 'recipe-image-${meal.id}',
-                child: CachedNetworkImage(
-                  imageUrl: meal.thumbnailUrl ?? '',
-                  height: 140,
-                  width: double.infinity,
-                  fit: BoxFit.fitWidth,
-                  alignment: Alignment.center,
-                  placeholder:
-                      (context, url) => Container(
-                        height: 200,
-                        color: AppColors.primaryOrange.withValues(alpha: 0.1),
-                        child: const Center(child: CircularProgressIndicator()),
-                      ),
-                  errorWidget:
-                      (context, url, error) => Container(
-                        height: 200,
-                        color: AppColors.primaryOrange.withValues(alpha: 0.1),
-                        child: const Icon(Icons.error),
-                      ),
+            Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(16),
+                  ),
+                  child: Hero(
+                    tag: 'recipe-image-${meal.id}',
+                    child: CachedNetworkImage(
+                      imageUrl: meal.thumbnailUrl ?? '',
+                      height: 140,
+                      width: double.infinity,
+                      fit: BoxFit.fitWidth,
+                      alignment: Alignment.center,
+                      placeholder:
+                          (context, url) => Container(
+                            height: 200,
+                            color: AppColors.primaryOrange.withValues(
+                              alpha: 0.1,
+                            ),
+                            child: const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          ),
+                      errorWidget:
+                          (context, url, error) => Container(
+                            height: 200,
+                            color: AppColors.primaryOrange.withValues(
+                              alpha: 0.1,
+                            ),
+                            child: const Icon(Icons.error),
+                          ),
+                    ),
+                  ),
                 ),
-              ),
+                Positioned(
+                  top: 8,
+                  right: 8,
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: onToggleFavorite,
+                      borderRadius: BorderRadius.circular(20),
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.9),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          meal.isFavorite
+                              ? Icons.favorite
+                              : Icons.favorite_border,
+                          color:
+                              meal.isFavorite
+                                  ? AppColors.primaryOrange
+                                  : Colors.grey,
+                          size: 20,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
             Padding(
               padding: const EdgeInsets.all(16),

@@ -7,12 +7,16 @@ class FavoritesCacheSource implements FavoritesSource {
 
   @override
   Stream<List<Meal>> toggleFavorite(String mealId) {
-    if (_favorites.contains(mealId)) {
+    if (isFavorite(mealId)) {
       _favorites.remove(mealId);
     } else {
       _favorites.add(mealId);
     }
-    return Stream.value(mapFavorites(_holdData));
+    return Stream.value(
+      _holdData
+          .map((meal) => meal.copyWith(isFavorite: isFavorite(meal.id)))
+          .toList(),
+    );
   }
 
   @override
