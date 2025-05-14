@@ -111,7 +111,11 @@ class HomePage extends StatelessWidget {
                             itemCount: state.meals.length,
                             itemBuilder: (context, index) {
                               final meal = state.meals[index];
-                              return RecipeTile(meal: meal);
+                              return RecipeTile(
+                                meal: meal,
+                                onToggleFavorite:
+                                    () => cubit.toggleFavorite(meal.id),
+                              );
                             },
                           ),
                 ),
@@ -143,7 +147,10 @@ class HomePage extends StatelessWidget {
                   );
                 }
                 final meal = state.meals[index];
-                return RecipeTile(meal: meal);
+                return RecipeTile(
+                  meal: meal,
+                  onToggleFavorite: () => cubit.toggleFavorite(meal.id),
+                );
               },
             ),
           );

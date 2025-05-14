@@ -4,15 +4,18 @@ import 'package:recipes_app/features/recipes/data/dtos/meal_dto.dart';
 import 'package:recipes_app/features/recipes/data/mappers/meal_from_dto_mapper.dart';
 import 'package:recipes_app/features/recipes/domain/models/meal.dart';
 import 'package:recipes_app/features/recipes/domain/repositories/recipes_repository.dart';
+import 'package:recipes_app/features/recipes/domain/sources/favorites_source.dart';
 
 class RecipesDataRepository implements RecipesRepository {
   const RecipesDataRepository({
     required this.http,
     required this.mealFromDtoMapper,
+    required this.favoritesSource,
   });
 
   final HttpFacade http;
   final MealFromDtoMapper mealFromDtoMapper;
+  final FavoritesSource favoritesSource;
 
   @override
   Stream<List<Meal>> getMealsByLetter(String letter) {
@@ -27,7 +30,8 @@ class RecipesDataRepository implements RecipesRepository {
                             mealFromDtoMapper.map(MealDto.fromJson(jsonDto)),
                       )
                       .toList(),
-        );
+        )
+        .map(favoritesSource.mapFavorites);
   }
 
   @override
@@ -43,6 +47,12 @@ class RecipesDataRepository implements RecipesRepository {
                             mealFromDtoMapper.map(MealDto.fromJson(jsonDto)),
                       )
                       .toList(),
-        );
+        )
+        .map(favoritesSource.mapFavorites);
+  }
+
+  @override
+  Stream<List<Meal>> toggleFavorite(String mealId) {
+    return favoritesSource.toggleFavorite(mealId);
   }
 }

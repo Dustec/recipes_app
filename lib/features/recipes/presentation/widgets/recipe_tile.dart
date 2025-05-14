@@ -6,10 +6,14 @@ import 'package:recipes_app/features/recipes/domain/models/meal.dart';
 import 'package:recipes_app/features/recipes/presentation/pages/recipe_details_page.dart';
 
 class RecipeTile extends StatelessWidget {
-  const RecipeTile({super.key, required this.meal});
+  const RecipeTile({
+    super.key,
+    required this.meal,
+    required this.onToggleFavorite,
+  });
 
   final Meal meal;
-
+  final VoidCallback onToggleFavorite;
   @override
   Widget build(BuildContext context) {
     return Card(
