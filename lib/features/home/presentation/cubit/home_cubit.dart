@@ -55,7 +55,6 @@ class HomeCubit extends Cubit<HomeState> with DisposableMixin {
             }
           },
           onError: (error) {
-            print('onError $error');
             emit(state.copyWith(isLoading: false));
           },
           onDone: () {
@@ -81,7 +80,6 @@ class HomeCubit extends Cubit<HomeState> with DisposableMixin {
             emit(state.copyWith(meals: meals, isLoading: false));
           },
           onError: (error) {
-            print('onError $error');
             emit(state.copyWith(isLoading: false));
           },
           onDone: () {

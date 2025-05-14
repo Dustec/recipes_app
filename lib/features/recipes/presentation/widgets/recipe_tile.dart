@@ -44,13 +44,13 @@ class RecipeTile extends StatelessWidget {
                   placeholder:
                       (context, url) => Container(
                         height: 200,
-                        color: AppColors.primaryOrange.withOpacity(0.1),
+                        color: AppColors.primaryOrange.withValues(alpha: 0.1),
                         child: const Center(child: CircularProgressIndicator()),
                       ),
                   errorWidget:
                       (context, url, error) => Container(
                         height: 200,
-                        color: AppColors.primaryOrange.withOpacity(0.1),
+                        color: AppColors.primaryOrange.withValues(alpha: 0.1),
                         child: const Icon(Icons.error),
                       ),
                 ),

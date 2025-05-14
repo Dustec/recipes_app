@@ -45,12 +45,12 @@ class _RecipeDetailsPageState extends State<RecipeDetailsPage> {
                   fit: BoxFit.cover,
                   placeholder:
                       (context, url) => Container(
-                        color: AppColors.primaryOrange.withOpacity(0.1),
+                        color: AppColors.primaryOrange.withValues(alpha: 0.1),
                         child: const Center(child: CircularProgressIndicator()),
                       ),
                   errorWidget:
                       (context, url, error) => Container(
-                        color: AppColors.primaryOrange.withOpacity(0.1),
+                        color: AppColors.primaryOrange.withValues(alpha: 0.1),
                         child: const Icon(Icons.error, size: 50),
                       ),
                 ),
@@ -131,11 +131,13 @@ class _RecipeDetailsPageState extends State<RecipeDetailsPage> {
                                 vertical: 6,
                               ),
                               decoration: BoxDecoration(
-                                color: AppColors.primaryOrange.withOpacity(0.1),
+                                color: AppColors.primaryOrange.withValues(
+                                  alpha: 0.1,
+                                ),
                                 borderRadius: BorderRadius.circular(20),
                                 border: Border.all(
-                                  color: AppColors.primaryOrange.withOpacity(
-                                    0.3,
+                                  color: AppColors.primaryOrange.withValues(
+                                    alpha: 0.3,
                                   ),
                                 ),
                               ),
