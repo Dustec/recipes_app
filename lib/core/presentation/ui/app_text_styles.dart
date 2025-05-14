@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
 
-class AppTextStyles extends TextStyle {
-  const AppTextStyles._({
-    required super.fontFamily,
-    required super.fontSize,
-    required super.fontWeight,
-    required super.color,
-    required super.decoration,
-  });
+class AppTextStyles {
+  static TextStyle brandTitle(Color color) {
+    return TextStyle(color: color, fontSize: 24, fontWeight: FontWeight.bold);
+  }
 
-  static AppTextStyles brandTitle(Color color) => AppTextStyles._(
-    fontFamily: 'Chewy',
-    fontSize: 24,
-    fontWeight: FontWeight.w700,
-    color: color,
-    decoration: TextDecoration.none,
-  );
+  static TextStyle title(Color color) {
+    return TextStyle(color: color, fontSize: 20, fontWeight: FontWeight.bold);
+  }
+
+  static TextStyle body(Color color) {
+    return TextStyle(color: color, fontSize: 16);
+  }
 }

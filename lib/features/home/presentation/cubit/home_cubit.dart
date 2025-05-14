@@ -66,8 +66,40 @@ class HomeCubit extends Cubit<HomeState> with DisposableMixin {
   }
 
   void loadMore() {
-    if (!state.isLoading && !state.hasReachedEnd) {
+    if (!state.isLoading && !state.hasReachedEnd && state.searchQuery == null) {
       getMealsByLetter(state.currentLetter);
     }
+  }
+
+  void search(String name) {
+    emit(state.copyWith(isLoading: true, searchQuery: name, meals: []));
+
+    _recipesRepository
+        .searchMealsByName(name)
+        .listen(
+          (meals) {
+            emit(state.copyWith(meals: meals, isLoading: false));
+          },
+          onError: (error) {
+            print('onError $error');
+            emit(state.copyWith(isLoading: false));
+          },
+          onDone: () {
+            emit(state.copyWith(isLoading: false));
+          },
+        )
+        .dispose(this);
+  }
+
+  void resetSearch() {
+    emit(
+      state.copyWith(
+        searchQuery: null,
+        meals: [],
+        currentLetter: 'a',
+        hasReachedEnd: false,
+      ),
+    );
+    getMealsByLetter('a');
   }
 }

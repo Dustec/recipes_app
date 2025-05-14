@@ -29,4 +29,20 @@ class RecipesDataRepository implements RecipesRepository {
                       .toList(),
         );
   }
+
+  @override
+  Stream<List<Meal>> searchMealsByName(String name) {
+    return http
+        .get('https://www.themealdb.com/api/json/v1/1/search.php?s=$name')
+        .handle<List<Meal>>(
+          mapper:
+              (dynamic rawJson) =>
+                  (safeCast<List<dynamic>>(rawJson['meals']) ?? [])
+                      .map(
+                        (dynamic jsonDto) =>
+                            mealFromDtoMapper.map(MealDto.fromJson(jsonDto)),
+                      )
+                      .toList(),
+        );
+  }
 }
