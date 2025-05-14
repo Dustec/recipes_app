@@ -2,11 +2,30 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:recipes_app/core/presentation/ui/app_colors.dart';
 import 'package:recipes_app/features/recipes/domain/models/meal.dart';
+import 'package:recipes_app/integrations/url_launcher_facade.dart';
 
-class RecipeDetailsPage extends StatelessWidget {
+class RecipeDetailsPage extends StatefulWidget {
   const RecipeDetailsPage({super.key, required this.meal});
 
   final Meal meal;
+
+  @override
+  State<RecipeDetailsPage> createState() => _RecipeDetailsPageState();
+}
+
+class _RecipeDetailsPageState extends State<RecipeDetailsPage> {
+  Future<void> _launchYouTubeVideo(String url) async {
+    if (!(await UrlLauncherFacade.launchUrl(url))) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('No se pudo abrir el video'),
+            backgroundColor: AppColors.primaryOrange,
+          ),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,9 +39,9 @@ class RecipeDetailsPage extends StatelessWidget {
             backgroundColor: AppColors.primaryOrange,
             flexibleSpace: FlexibleSpaceBar(
               background: Hero(
-                tag: 'recipe-image-${meal.id}',
+                tag: 'recipe-image-${widget.meal.id}',
                 child: CachedNetworkImage(
-                  imageUrl: meal.thumbnailUrl ?? '',
+                  imageUrl: widget.meal.thumbnailUrl ?? '',
                   fit: BoxFit.cover,
                   placeholder:
                       (context, url) => Container(
@@ -49,7 +68,7 @@ class RecipeDetailsPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    meal.name,
+                    widget.meal.name,
                     style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -57,10 +76,11 @@ class RecipeDetailsPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  if (meal.category != null || meal.area != null) ...[
+                  if (widget.meal.category != null ||
+                      widget.meal.area != null) ...[
                     Row(
                       children: [
-                        if (meal.category != null) ...[
+                        if (widget.meal.category != null) ...[
                           const Icon(
                             Icons.category,
                             size: 20,
@@ -68,7 +88,7 @@ class RecipeDetailsPage extends StatelessWidget {
                           ),
                           const SizedBox(width: 8),
                           Text(
-                            meal.category!,
+                            widget.meal.category!,
                             style: const TextStyle(
                               fontSize: 16,
                               color: AppColors.primaryOrange,
@@ -76,9 +96,10 @@ class RecipeDetailsPage extends StatelessWidget {
                             ),
                           ),
                         ],
-                        if (meal.category != null && meal.area != null)
+                        if (widget.meal.category != null &&
+                            widget.meal.area != null)
                           const SizedBox(width: 24),
-                        if (meal.area != null) ...[
+                        if (widget.meal.area != null) ...[
                           const Icon(
                             Icons.public,
                             size: 20,
@@ -86,7 +107,7 @@ class RecipeDetailsPage extends StatelessWidget {
                           ),
                           const SizedBox(width: 8),
                           Text(
-                            meal.area!,
+                            widget.meal.area!,
                             style: const TextStyle(
                               fontSize: 16,
                               color: AppColors.primaryOrange,
@@ -98,12 +119,12 @@ class RecipeDetailsPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 24),
                   ],
-                  if (meal.tags.isNotEmpty) ...[
+                  if (widget.meal.tags.isNotEmpty) ...[
                     Wrap(
                       spacing: 8,
                       runSpacing: 8,
                       children:
-                          meal.tags.map((tag) {
+                          widget.meal.tags.map((tag) {
                             return Container(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 12,
@@ -140,9 +161,9 @@ class RecipeDetailsPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  ...List.generate(meal.ingredients.length, (index) {
-                    final ingredient = meal.ingredients[index];
-                    final measure = meal.measures[index];
+                  ...List.generate(widget.meal.ingredients.length, (index) {
+                    final ingredient = widget.meal.ingredients[index];
+                    final measure = widget.meal.measures[index];
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 12),
                       child: Row(
@@ -179,21 +200,21 @@ class RecipeDetailsPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  if (meal.instructions != null)
+                  if (widget.meal.instructions != null)
                     Text(
-                      meal.instructions!,
+                      widget.meal.instructions!,
                       style: const TextStyle(
                         fontSize: 16,
                         color: AppColors.textBrown,
                         height: 1.5,
                       ),
                     ),
-                  if (meal.youtubeUrl != null)
+                  const SizedBox(height: 24),
+                  if (widget.meal.youtubeUrl != null)
                     SafeArea(
                       child: ElevatedButton.icon(
-                        onPressed: () {
-                          // TODO: Open YouTube video
-                        },
+                        onPressed:
+                            () => _launchYouTubeVideo(widget.meal.youtubeUrl!),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primaryOrange,
                           foregroundColor: AppColors.white,
@@ -210,7 +231,7 @@ class RecipeDetailsPage extends StatelessWidget {
                       ),
                     )
                   else
-                    SafeArea(child: const SizedBox(height: 24)),
+                    const SafeArea(child: SizedBox(height: 24)),
                 ],
               ),
             ),
