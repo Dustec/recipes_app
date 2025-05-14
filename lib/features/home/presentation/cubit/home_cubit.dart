@@ -12,7 +12,9 @@ part 'home_state.dart';
 class HomeCubit extends Cubit<HomeState> with DisposableMixin {
   HomeCubit({required RecipesRepository recipesRepository})
     : _recipesRepository = recipesRepository,
-      super(const HomeState());
+      super(const HomeState()) {
+    getMealsByLetter('b');
+  }
 
   final RecipesRepository _recipesRepository;
 
@@ -28,11 +30,13 @@ class HomeCubit extends Cubit<HomeState> with DisposableMixin {
         .getMealsByLetter(letter)
         .listen(
           (meals) {
-            emit(state.copyWith(meals: meals, isLoading: false));
+            emit(state.copyWith(meals: meals));
           },
           onError: (error) {
-            emit(state.copyWith(isLoading: false));
             print('onError $error');
+          },
+          onDone: () {
+            emit(state.copyWith(isLoading: false));
           },
         )
         .dispose(this);
