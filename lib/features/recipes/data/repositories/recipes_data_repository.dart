@@ -17,10 +17,10 @@ class RecipesDataRepository implements RecipesRepository {
   Stream<List<Meal>> getMealsByLetter(String letter) {
     return http
         .get('https://www.themealdb.com/api/json/v1/1/search.php?f=$letter')
-        .handle(
+        .handle<List<Meal>>(
           mapper:
               (dynamic rawJson) =>
-                  rawJson['meals']
+                  (rawJson['meals'] as List<dynamic>)
                       .map(
                         (dynamic jsonDto) =>
                             mealFromDtoMapper.map(MealDto.fromJson(jsonDto)),
