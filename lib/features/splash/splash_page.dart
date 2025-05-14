@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:recipes_app/core/presentation/resources/app_images.dart';
 import 'package:recipes_app/core/presentation/ui/app_colors.dart';
 import 'package:recipes_app/core/presentation/ui/app_text_styles.dart';
-import 'package:recipes_app/features/home/home_page.dart';
+import 'package:recipes_app/features/home/presentation/home_page.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
