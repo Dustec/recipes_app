@@ -64,7 +64,10 @@ class _SearchModalState extends State<SearchModal> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primaryOrange,
                   ),
-                  child: const Text('Buscar'),
+                  child: Text(
+                    'Buscar',
+                    style: AppTextStyles.body(AppColors.white),
+                  ),
                 ),
               ],
             ),

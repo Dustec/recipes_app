@@ -48,7 +48,7 @@ class _SplashPageState extends State<SplashPage> {
             ),
             Text(
               'Recipes App',
-              style: AppTextStyles.brandTitle(AppColors.accentYellow),
+              style: AppTextStyles.brandTitle(AppColors.white),
             ),
           ],
         ),
