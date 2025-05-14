@@ -2,18 +2,17 @@ import 'package:recipes_app/features/recipes/domain/models/meal.dart';
 import 'package:recipes_app/features/recipes/domain/sources/favorites_source.dart';
 
 class FavoritesCacheSource implements FavoritesSource {
-  final List<Meal> _holdData = [];
   final List<String> _favorites = [];
 
   @override
-  Stream<List<Meal>> toggleFavorite(String mealId) {
+  Stream<List<Meal>> toggleFavorite(String mealId, List<Meal> meals) {
     if (isFavorite(mealId)) {
       _favorites.remove(mealId);
     } else {
       _favorites.add(mealId);
     }
     return Stream.value(
-      _holdData
+      meals
           .map((meal) => meal.copyWith(isFavorite: isFavorite(meal.id)))
           .toList(),
     );
@@ -26,8 +25,6 @@ class FavoritesCacheSource implements FavoritesSource {
 
   @override
   List<Meal> mapFavorites(List<Meal> meals) {
-    _holdData.clear();
-    _holdData.addAll(meals);
     return meals
         .map((meal) => meal.copyWith(isFavorite: isFavorite(meal.id)))
         .toList();

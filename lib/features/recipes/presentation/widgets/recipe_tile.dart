@@ -15,6 +15,8 @@ class RecipeTile extends StatelessWidget {
   final Meal meal;
   final VoidCallback onToggleFavorite;
 
+  static const _imageHeight = 140.0;
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -44,13 +46,13 @@ class RecipeTile extends StatelessWidget {
                     tag: 'recipe-image-${meal.id}',
                     child: CachedNetworkImage(
                       imageUrl: meal.thumbnailUrl ?? '',
-                      height: 140,
+                      height: _imageHeight,
                       width: double.infinity,
                       fit: BoxFit.fitWidth,
                       alignment: Alignment.center,
                       placeholder:
                           (context, url) => Container(
-                            height: 200,
+                            height: _imageHeight,
                             color: AppColors.primaryOrange.withValues(
                               alpha: 0.1,
                             ),
@@ -60,7 +62,7 @@ class RecipeTile extends StatelessWidget {
                           ),
                       errorWidget:
                           (context, url, error) => Container(
-                            height: 200,
+                            height: _imageHeight,
                             color: AppColors.primaryOrange.withValues(
                               alpha: 0.1,
                             ),
