@@ -1,3 +1,4 @@
+import 'package:recipes_app/core/domain/extensions/app_extensions.dart';
 import 'package:recipes_app/core/domain/facades/http_facade.dart';
 import 'package:recipes_app/features/recipes/data/dtos/meal_dto.dart';
 import 'package:recipes_app/features/recipes/data/mappers/meal_from_dto_mapper.dart';
@@ -20,7 +21,7 @@ class RecipesDataRepository implements RecipesRepository {
         .handle<List<Meal>>(
           mapper:
               (dynamic rawJson) =>
-                  (rawJson['meals'] as List<dynamic>)
+                  (safeCast<List<dynamic>>(rawJson['meals']) ?? [])
                       .map(
                         (dynamic jsonDto) =>
                             mealFromDtoMapper.map(MealDto.fromJson(jsonDto)),

@@ -4,6 +4,7 @@ import 'package:recipes_app/core/presentation/resources/app_images.dart';
 import 'package:recipes_app/core/presentation/ui/app_colors.dart';
 import 'package:recipes_app/core/presentation/ui/app_text_styles.dart';
 import 'package:recipes_app/features/home/presentation/cubit/home_cubit.dart';
+import 'package:recipes_app/features/recipes/presentation/widgets/recipe_tile.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -37,14 +38,37 @@ class HomePage extends StatelessWidget {
 
       body: BlocBuilder<HomeCubit, HomeState>(
         builder: (context, state) {
-          if (state.isLoading) {
+          if (state.isLoading && state.meals.isEmpty) {
             return const Center(child: CircularProgressIndicator());
           }
-          return ListView.builder(
-            itemCount: state.meals.length,
-            itemBuilder: (context, index) {
-              return ListTile(title: Text(state.meals[index].name));
+
+          return NotificationListener<ScrollNotification>(
+            onNotification: (ScrollNotification scrollInfo) {
+              if (scrollInfo is ScrollEndNotification) {
+                if (scrollInfo.metrics.pixels >=
+                    scrollInfo.metrics.maxScrollExtent * 0.8) {
+                  context.read<HomeCubit>().loadMore();
+                }
+              }
+              return true;
             },
+            child: ListView.builder(
+              physics: const ClampingScrollPhysics(),
+              padding: const EdgeInsets.only(bottom: 100),
+              itemCount: state.meals.length + (state.isLoading ? 1 : 0),
+              itemBuilder: (context, index) {
+                if (index == state.meals.length) {
+                  return const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                }
+                final meal = state.meals[index];
+                return RecipeTile(meal: meal);
+              },
+            ),
           );
         },
       ),

@@ -10,10 +10,12 @@ part 'home_cubit.freezed.dart';
 part 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> with DisposableMixin {
+  static const int _minItemsForScroll = 4;
+
   HomeCubit({required RecipesRepository recipesRepository})
     : _recipesRepository = recipesRepository,
       super(const HomeState()) {
-    getMealsByLetter('b');
+    getMealsByLetter('a');
   }
 
   final RecipesRepository _recipesRepository;
@@ -25,20 +27,47 @@ class HomeCubit extends Cubit<HomeState> with DisposableMixin {
   }
 
   void getMealsByLetter(String letter) {
+    if (state.hasReachedEnd) {
+      return;
+    }
+
     emit(state.copyWith(isLoading: true));
     _recipesRepository
         .getMealsByLetter(letter)
         .listen(
           (meals) {
-            emit(state.copyWith(meals: meals));
+            final currentMeals = state.meals;
+            final updatedMeals = [...currentMeals, ...meals];
+            final nextLetter = String.fromCharCode(letter.codeUnitAt(0) + 1);
+            final hasReachedEnd = nextLetter.codeUnitAt(0) > 'z'.codeUnitAt(0);
+
+            emit(
+              state.copyWith(
+                meals: updatedMeals,
+                currentLetter: nextLetter,
+                hasReachedEnd: hasReachedEnd,
+              ),
+            );
+
+            // Si tenemos pocos elementos y no hemos llegado al final, cargar la siguiente letra
+            if (updatedMeals.length < _minItemsForScroll && !hasReachedEnd) {
+              getMealsByLetter(nextLetter);
+            }
           },
           onError: (error) {
             print('onError $error');
+            emit(state.copyWith(isLoading: false));
           },
           onDone: () {
             emit(state.copyWith(isLoading: false));
           },
         )
         .dispose(this);
+  }
+
+  void loadMore() {
+    if (!state.isLoading && !state.hasReachedEnd) {
+      getMealsByLetter(state.currentLetter);
+    }
   }
 }
